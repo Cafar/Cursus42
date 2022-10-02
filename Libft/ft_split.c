@@ -6,115 +6,70 @@
 /*   By: rcarnero <rcarnero@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/28 19:35:39 by rcarnero          #+#    #+#             */
-/*   Updated: 2022/09/28 19:38:07 by rcarnero         ###   ########.fr       */
+/*   Updated: 2022/09/30 16:33:05 by rcarnero         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "libft.h"
+#include "libft.h"
 
-// int	ft_hm(char const *s, char c)
-// {
-// 	size_t	nbr;
-// 	int		i;
+static int	count_words(const char *str, char c)
+{
+	int	i;
+	int	trigger;
 
-// 	nbr = 0;
-// 	i = 0;
-// 	while (s[i])
-// 	{
-// 		while (s[i] == c)
-// 			i++;
-// 		if (i > 0 && s[i] && s[i - 1] == c)
-// 			nbr++;
-// 		if (s[i])
-// 			i++;
-// 	}
-// 	if (nbr == 0 && s[i - 1] == c)
-// 		return (0);
-// 	if (s[0] != c)
-// 		nbr++;
-// 	return (nbr);
-// }
+	i = 0;
+	trigger = 0;
+	while (*str)
+	{
+		if (*str != c && trigger == 0)
+		{
+			trigger = 1;
+			i++;
+		}
+		else if (*str == c)
+			trigger = 0;
+		str++;
+	}
+	return (i);
+}
 
-// static char		**ft_mal(char **strs, char const *s, char c)
-// {
-// 	size_t	count;
-// 	int		i;
-// 	int		h;
+static char	*word_dup(const char *str, int start, int finish)
+{
+	char	*word;
+	int		i;
 
-// 	count = 0;
-// 	i = 0;
-// 	h = 0;
-// 	while (s[h])
-// 	{
-// 		if (s[h] != c)
-// 			count++;
-// 		else if (h > 0 && s[h - 1] != c)
-// 		{
-// 			strs[i] = malloc(sizeof(char) * (count + 1));
-// 			if (!strs[i])
-// 				return (0);
-// 			count = 0;
-// 			i++;
-// 		}
-// 		if (s[h + 1] == '\0' && s[h] != c)
-// 			if (!(strs[i] = malloc(sizeof(char) * count + 1)))
-// 				return (0);
-// 		h++;
-// 	}
-// 	return (strs);
-// }
+	i = 0;
+	word = malloc((finish - start + 1) * sizeof(char));
+	while (start < finish)
+		word[i++] = str[start++];
+	word[i] = '\0';
+	return (word);
+}
 
-// static char		**ft_cpy(char **strs, char const *s, char c)
-// {
-// 	int i;
-// 	int j;
-// 	int h;
+char	**ft_split(char const *s, char c)
+{
+	size_t	i;
+	size_t	j;
+	int		index;
+	char	**split;
 
-// 	i = 0;
-// 	j = 0;
-// 	h = 0;
-// 	while (s[h])
-// 	{
-// 		if (s[h] != c)
-// 			strs[i][j++] = s[h];
-// 		else if (h > 0 && s[h - 1] != c)
-// 			if (h != 0)
-// 			{
-// 				strs[i][j] = '\0';
-// 				j = 0;
-// 				i++;
-// 			}
-// 		if (s[h + 1] == '\0' && s[h] != c)
-// 			strs[i][j] = '\0';
-// 		h++;
-// 	}
-// 	return (strs);
-// }
-
-// char	**ft_split(char const *s, char c)
-// {
-// 	char	**rtn;
-// 	int		nbr_w;
-
-// 	if (!s || !*s)
-// 	{
-// 		(rtn = malloc(sizeof(char *) * 1)
-// 		if (!(rtn = malloc(sizeof(char *) * 1)))
-// 			return (NULL);
-// 		*rtn = (void *)0;
-// 		return (rtn);
-// 	}
-// 	nbr_w = ft_hm(s, c);
-// 	rtn = malloc(sizeof(char *) * (nbr_w + 1));
-// 	if (!rtn)
-// 		return (0);
-// 	if (ft_mal(rtn, s, c) != 0)
-// 		ft_cpy(rtn, s, c);
-// 	else
-// 	{
-// 		free(rtn);
-// 		return (NULL);
-// 	}
-// 	rtn[nbr_w] = (void *)0;
-// 	return (rtn);
-// }
+	split = malloc((count_words(s, c) + 1) * sizeof(char *));
+	if (!s || !split)
+		return (0);
+	i = 0;
+	j = 0;
+	index = -1;
+	while (i <= ft_strlen(s))
+	{
+		if (s[i] != c && index < 0)
+			index = i;
+		else if ((s[i] == c || i == ft_strlen(s)) && index >= 0)
+		{
+			split[j++] = word_dup(s, index, i);
+			index = -1;
+		}
+		i++;
+	}
+	split[j] = 0;
+	return (split);
+}

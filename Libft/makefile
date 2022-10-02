@@ -6,39 +6,44 @@
 #    By: rcarnero <rcarnero@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/21 17:53:44 by rcarnero          #+#    #+#              #
-#    Updated: 2022/09/28 20:00:40 by rcarnero         ###   ########.fr        #
+#    Updated: 2022/10/02 12:29:48 by rcarnero         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = libft.a
-PATH_SRC = ./
-HEADER = ./includes/
-FLAG = -Wall -Wextra -Werror
-OPTION = -c -I $(HEADER)
-SRC = $(PATH_SRC)ft_bzero.c $(PATH_SRC)ft_isalnum.c $(PATH_SRC)ft_isalpha.c \
-		$(PATH_SRC)ft_isdigit.c $(PATH_SRC)ft_isascii.c \
-		$(PATH_SRC)ft_strlen.c $(PATH_SRC)ft_isprint.c $(PATH_SRC)ft_memset.c \
-		$(PATH_SRC)ft_memcpy.c $(PATH_SRC)ft_memmove.c $(PATH_SRC)ft_strlcpy.c \
-		$(PATH_SRC)ft_strlcat.c $(PATH_SRC)ft_toupper.c $(PATH_SRC)ft_tolower.c \
-		$(PATH_SRC)ft_strchr.c $(PATH_SRC)ft_strrchr.c $(PATH_SRC)ft_strncmp.c \
-		$(PATH_SRC)ft_memchr.c $(PATH_SRC)ft_memcmp.c $(PATH_SRC)ft_strnstr.c \
-		$(PATH_SRC)ft_atoi.c $(PATH_SRC)ft_calloc.c $(PATH_SRC)ft_strdup.c \
-		$(PATH_SRC)ft_substr.c $(PATH_SRC)ft_strjoin.c $(PATH_SRC)ft_itoa.c \
-		$(PATH_SRC)ft_strmapi.c
-OBJ = ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isdigit.o ft_isascii.o ft_strlen.o \
-		ft_isprint.o ft_memset.o ft_memcpy.o ft_memmove.o ft_strlcpy.o ft_strlcat.o \
-		ft_toupper.o ft_tolower.o ft_strchr.o ft_strrchr.o ft_strncmp.o ft_memchr.o \
-		ft_memcmp.o ft_strnstr.o ft_atoi.o ft_calloc.o ft_strdup.o ft_substr.o ft_strjoin.o \
-		ft_itoa.o ft_strmapi.o
-all: $(NAME)
+SRCS			=	ft_isalnum.c ft_isprint.c ft_memcmp.c  ft_putchar_fd.c ft_split.c \
+					ft_strlcat.c ft_strncmp.c ft_substr.c ft_atoi.c ft_isalpha.c \
+					ft_itoa.c ft_memcpy.c  ft_putendl_fd.c ft_strchr.c  ft_strlcpy.c \
+					ft_strnstr.c ft_tolower.c ft_bzero.c   ft_isascii.c ft_striteri.c\
+					ft_memmove.c ft_putnbr_fd.c  ft_strdup.c  ft_strlen.c  ft_strrchr.c \
+					ft_toupper.c ft_calloc.c  ft_isdigit.c ft_memchr.c  ft_memset.c  \
+					ft_putstr_fd.c  ft_strjoin.c ft_strmapi.c ft_strtrim.c 
+OBJS			= $(SRCS:.c=.o)
 
-$(NAME):
-	gcc $(FLAG) $(OPTION) $(SRC)
-	ar rc $(NAME) $(OBJ)
+BONUS			=	ft_lstadd_front_bonus.c ft_lstnew_bonus.c ft_lstsize_bonus.c ft_lstlast_bonus.c \
+					ft_lstadd_back_bonus.c ft_lstdelone_bonus.c ft_lstclear_bonus.c ft_lstiter_bonus.c \
+					ft_lstmap_bonus.c
+BONUS_OBJS		= $(BONUS:.c=.o)
+
+CC				= gcc
+RM				= rm -f
+CFLAGS			= -Wall -Wextra -Werror -I.
+
+NAME			= libft.a
+
+all:			$(NAME)
+
+$(NAME):		$(OBJS)
+				ar rcs $(NAME) $(OBJS)
 
 clean:
-	/bin/rm -f $(OBJ)
-fclean: clean
-	/bin/rm -f $(NAME)
+				$(RM) $(OBJS) $(BONUS_OBJS)
 
-re: fclean all
+fclean:			clean
+				$(RM) $(NAME)
+
+re:				fclean $(NAME)
+
+bonus:			$(OBJS) $(BONUS_OBJS)
+				ar rcs $(NAME) $(OBJS) $(BONUS_OBJS)
+
+.PHONY:			all clean fclean re bonus
