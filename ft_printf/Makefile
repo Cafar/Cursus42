@@ -1,0 +1,44 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: rcarnero <rcarnero@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/09/21 17:53:44 by rcarnero          #+#    #+#              #
+#    Updated: 2022/10/11 16:16:45 by rcarnero         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+SRCS = ft_printf.c \
+ft_printf_utils.c \
+ft_print_char.c \
+ft_print_hexa.c \
+ft_print_dec.c \
+ft_print_str.c
+
+
+NAME = libftprintf.a
+OBJS = ${SRCS:.c=.o}
+FLAGS = -Wall -Wextra -Werror
+CC = gcc
+AR = ar rcs
+RM = rm -f
+
+.c.o:
+	${CC} ${FLAGS} -c $< -o ${<:.c=.o}
+
+$(NAME): ${OBJS}
+	${AR} ${NAME} ${OBJS}
+
+all: $(NAME)
+	
+clean:
+	${RM} ${OBJS}
+
+fclean: clean
+	${RM} ${NAME}
+
+re: fclean all
+
+.PHONY: all clean fclean re
